@@ -83,6 +83,14 @@ public struct Trie {
         return longestPrefixIn(&keys, charStack: &lastKeys, node: root)
     }
     
+    /// Returns the longest prefix in the trie matching the given search string.
+    /// The returned value is a full word in the trie or `nil`.
+    public func longestWordInCommonWith(_ searchString: String) -> String? {
+        var keys = searchString.makeIterator()
+        var lastKeys = [Character]()
+        return longestWordInCommonWith(&keys, charStack: &lastKeys, node: root)
+    }
+    
     // MARK: Adding and Removing Elements
     
     /// Inserts the given word into the trie.
@@ -185,6 +193,31 @@ public struct Trie {
         } else {
             return String(charStack)
         }
+    }
+    
+    fileprivate func longestWordInCommonWith(_ keyGenerator: inout IndexingIterator<String>,
+        charStack: inout [Character], node: TrieNode) -> String? {
+        
+        var commonWord: String? = nil
+        
+        if let key = node.key {
+            charStack.append(key)
+        }
+        
+        if let theKey = keyGenerator.next(), let nextNode = node.children[theKey] {
+            commonWord = longestWordInCommonWith(&keyGenerator, charStack: &charStack, node: nextNode)
+        }
+        
+        if commonWord == nil {
+            if node.isWord && node != root {
+                commonWord = String(charStack)
+            }
+            else {
+                _ = charStack.popLast()
+            }
+        }
+        
+        return commonWord
     }
     
     fileprivate func insert(_ keyGenerator: inout IndexingIterator<String>, node: TrieNode) -> Bool {

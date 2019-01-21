@@ -85,6 +85,18 @@ class TrieTests: XCTestCase {
         XCTAssertEqual(trie.longestPrefixIn("Apple"), "Apple")
     }
     
+    func testLongestWordInCommonWith() {
+        trie = Trie(TestData.Elements)
+        XCTAssertEqual(trie.longestWordInCommonWith(""), nil)
+        XCTAssertEqual(trie.longestWordInCommonWith("abc"), nil)
+        XCTAssertEqual(trie.longestWordInCommonWith("N"), nil)
+        XCTAssertEqual(trie.longestWordInCommonWith("Hello World"), "Hello")
+        XCTAssertEqual(trie.longestWordInCommonWith("Hel"), "Hel")
+        XCTAssertEqual(trie.longestWordInCommonWith("Y"), "Y")
+        XCTAssertEqual(trie.longestWordInCommonWith("Yes"), "Yes")
+        XCTAssertEqual(trie.longestWordInCommonWith("Apple"), "Apple")
+    }
+    
     func testInsert() {
         trie.insert("abc")
         XCTAssertEqual(trie.elements, ["abc"])
